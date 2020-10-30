@@ -1,0 +1,15 @@
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.csprojAssemblyReference.cache
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.AssemblyInfoInputs.cache
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.AssemblyInfo.cs
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.csproj.CoreCompileInputs.cache
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\bin\Debug\netcoreapp3.1\Inventory.exe
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\bin\Debug\netcoreapp3.1\Inventory.deps.json
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\bin\Debug\netcoreapp3.1\Inventory.runtimeconfig.json
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\bin\Debug\netcoreapp3.1\Inventory.runtimeconfig.dev.json
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\bin\Debug\netcoreapp3.1\Inventory.dll
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\bin\Debug\netcoreapp3.1\Inventory.pdb
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\bin\Debug\netcoreapp3.1\Geevers.Infrastructure.dll
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.csproj.CopyComplete
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.dll
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.pdb
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.genruntimeconfig.cache
