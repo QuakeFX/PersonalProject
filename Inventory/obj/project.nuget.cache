@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "2JxOKHCHmWxWh8QBS19NdsX350Vzd6h7C0WtLKstaYFjOyoKELR4w2HTEvQn250G+L6HfJ1zrmgvexX0GN2hjw==",
+  "dgSpecHash": "IP/j9WZp5zl2+7M1er0F9e8+DR7YpeLpwimyS2Oo0SoI1/Xxeq3sBSOGVm2dNqFChdm/HirYEma7znk6mxWZ4w==",
   "success": true,
-  "projectFilePath": "/Users/axlverheul/Projects/Inventory/Inventory/Inventory.csproj",
+  "projectFilePath": "C:\\Users\\axlve\\Source\\Repos\\PersonalProject\\Inventory\\Inventory.csproj",
   "expectedPackageFiles": [
-    "/Users/axlverheul/.nuget/packages/geevers.infrastructure/1.0.3/geevers.infrastructure.1.0.3.nupkg.sha512"
+    "C:\\Users\\axlve\\.nuget\\packages\\geevers.infrastructure\\1.0.3\\geevers.infrastructure.1.0.3.nupkg.sha512"
   ],
   "logs": []
 }
