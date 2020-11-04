@@ -26,3 +26,4 @@ C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\In
 C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.dll
 C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.pdb
 C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.genruntimeconfig.cache
+C:\Users\axlve\Source\Repos\PersonalProject\Inventory\obj\Debug\netcoreapp3.1\Inventory.csprojAssemblyReference.cache
