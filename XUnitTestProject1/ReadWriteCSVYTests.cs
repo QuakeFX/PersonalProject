@@ -80,7 +80,7 @@ namespace Inventory.UnitTests
             Assert.False(response.IsSuccessStatusCode);
         }
 
-        // ADDSTRING
+        // AddRecord
 
         [Theory]
         [InlineData("a")] //arraysize = 1
@@ -88,9 +88,9 @@ namespace Inventory.UnitTests
         [InlineData("0", "1", "2")] //numbers
         [InlineData("", "text", "")] //empty fields
         [InlineData(" ", " ", " ")] //whitespaces
-        public void AddString_ValidInput_ShouldReturnCreated(params string[] input)
+        public void AddRecord_ValidInputStrArray_ShouldReturnCreated(params string[] input)
         {
-            var response = sut.AddString(input);
+            var response = sut.AddRecord(input);
             Assert.Equal(System.Net.HttpStatusCode.Created, response.Status);
             Assert.True(response.IsSuccessStatusCode);
         }
@@ -98,9 +98,9 @@ namespace Inventory.UnitTests
         [Theory]
         [InlineData("")] //empty
         [InlineData("", "", "")] //array full of nothing
-        public void AddString_EmptyInput_ShouldReturnCreated(params string[] input)
+        public void AddRecord_EmptyInputStrArray_ShouldReturnCreated(params string[] input)
         {
-            var response = sut.AddString(input);
+            var response = sut.AddRecord(input);
             Assert.Equal(System.Net.HttpStatusCode.Created, response.Status);
             Assert.True(response.IsSuccessStatusCode);
         }
@@ -110,36 +110,36 @@ namespace Inventory.UnitTests
         [InlineData("", "\t", "")] //tab in middle of array
         [InlineData("\n")] //CR
         [InlineData("", "\n", "")] //CR in middle of array
-        public void AddString_DangerousCharacters_ShouldReturnBadRequest(params string[] input)
+        public void AddRecord_DangerousCharactersStrArray_ShouldReturnBadRequest(params string[] input)
         {
-            var response = sut.AddString(input);
-            Assert.Equal(System.Net.HttpStatusCode.Created, response.Status);
-            Assert.True(response.IsSuccessStatusCode);
-        }
-
-        [Fact]
-        public void AddString_InvalidInputNull_ShouldReturnBadRequest()
-        {
-            string[] input = null;
-            var response = sut.AddString(input);
+            var response = sut.AddRecord(input);
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.Status);
             Assert.False(response.IsSuccessStatusCode);
         }
 
         [Fact]
-        public void AddString_InvalidInputEmptyArray_ShouldReturnBadRequest()
+        public void AddRecord_InvalidInputNullStrArray_ShouldReturnBadRequest()
+        {
+            string[] input = null;
+            var response = sut.AddRecord(input);
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.Status);
+            Assert.False(response.IsSuccessStatusCode);
+        }
+
+        [Fact]
+        public void AddRecord_InvalidInputEmptyStrArray_ShouldReturnBadRequest()
         {
             string[] input = new string[] { };
-            var response = sut.AddString(input);
+            var response = sut.AddRecord(input);
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.Status);
             Assert.False(response.IsSuccessStatusCode);
         }
         
         [Fact]
-        public void AddString_InvalidInputEmptyArraySizeTwo_ShouldReturnBadRequest()
+        public void AddRecord_InvalidInputEmptyStrArraySizeTwo_ShouldReturnBadRequest()
         {
             string[] input = new string[2];
-            var response = sut.AddString(input);
+            var response = sut.AddRecord(input);
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.Status);
             Assert.False(response.IsSuccessStatusCode);
         }
@@ -150,6 +150,7 @@ namespace Inventory.UnitTests
         [InlineData("1",1)]
         [InlineData("c", 3)]
         [InlineData(" ", 2)]
+        [InlineData("   ", 2)]
         [InlineData("\"\"", 2)]
         public void RecordExists_Valid_ShouldReturnTrue(string key, int column)
         {
@@ -158,6 +159,7 @@ namespace Inventory.UnitTests
             sut.AddRecord("1;2");
             sut.AddRecord("a;b;c");
             sut.AddRecord("a; ;c");
+            sut.AddRecord("e;   ;f");
             sut.AddRecord("a;\"\";c;d");
             var response = sut.RecordExists(key, column);
             Assert.True(response.Result);
@@ -177,14 +179,12 @@ namespace Inventory.UnitTests
             sut.AddRecord("1;2;3");
             sut.AddRecord("a;b;c");
             var response = sut.RecordExists(key, column);
-            Assert.True(response.Result);
+            Assert.False(response.Result);
             Assert.True(response.IsSuccessStatusCode);
         }
 
         [Theory]
         [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("   ")]
         [InlineData(null)]
         public void RecordExists_InvalidKey_ShouldReturnBadRequest(string key)
         {
@@ -199,7 +199,30 @@ namespace Inventory.UnitTests
         [InlineData(-2)]
         public void RecordExists_ZeroOrNegativeColumn_ShouldThrowArgumentOutOfRangeException(int column) //@Joep BadRequest of ArgumentOutOfRange exception?
         {
-            Assert.Throws<ArgumentException>(() => sut.RecordExists("key", column));
+            Assert.Throws<ArgumentOutOfRangeException>(() => sut.RecordExists("key", column));
+        }
+
+        [Fact]
+        public void RemoveUnnecessarySeperators_ValidInput_ShouldReturnCleanString()
+        {
+            Assert.Equal("a", sut.RemoveUnnecessarySeperators("a"));
+            Assert.Equal("a", sut.RemoveUnnecessarySeperators("a;"));
+            Assert.Equal("abc", sut.RemoveUnnecessarySeperators("abc"));
+            Assert.Equal("abc", sut.RemoveUnnecessarySeperators("abc;;;"));
+            Assert.Equal("a;b;c", sut.RemoveUnnecessarySeperators("a;b;c"));
+            Assert.Equal("a;b;c", sut.RemoveUnnecessarySeperators("a;b;c;"));
+            Assert.Equal("a;;b;;c", sut.RemoveUnnecessarySeperators("a;;b;;c"));
+            Assert.Equal("a;;b;;c", sut.RemoveUnnecessarySeperators("a;;b;;c;;;;;;"));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(";")]
+        [InlineData(";;;")]
+        [InlineData(null)]
+        public void RemoveUnnecessarySeperators_MeaninglessInput_ShouldReturnEmptyString (string input)
+        {
+            Assert.Equal(sut.RemoveUnnecessarySeperators(input), "");
         }
     }
 }
