@@ -6,15 +6,6 @@ using Geevers.Infrastructure;
 
 namespace Inventory
 {
-    class Program
-    {
-        static void Main()
-        {
-            //var csv = new ReadWriteCSV("/Users/axlve/OneDrive/Desktop/inventory.txt");
-            //var read = new ReadWriteCSV("/Users/axlve/OneDrive/Desktop/inventory-test.csv");
-        }
-    }
-
     public class ReadWriteCSV
     {
         // FIELDS
@@ -90,20 +81,28 @@ namespace Inventory
 
         // METHODS
 
-        private Response<string> AddLine(string line)
+        public enum WriteTo { Main, Temp }
+
+        public Response<string> WriteLineToFile(string line, WriteTo mode = WriteTo.Main)
         {
             // returns Created if record was succesfully created
-            // returns BadRequest if string contains dangerous characters
+            // returns BadRequest if string contains dangerous characters or is null
             // returns InternalServerError if for some reason record could not be created
 
-            //if (line == null || ContainsDangerousCharacters(line))
+            if (line == null)
+            {
+                throw new ArgumentNullException("line", "The line to be written to file cannot be null");
+            }
             if (ContainsDangerousCharacters(line))
-                {
+            {
                 return HttpStatusCode.BadRequest;
             }
             try
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepath, true))
+                string destination = filepath;
+                if (mode == WriteTo.Main) { destination = filepath; }
+                if (mode == WriteTo.Temp) { destination = tempFile; }
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@destination, true))
                 {
                     file.WriteLine(RemoveUnnecessarySeperators(line));
                     return HttpStatusCode.Created;
@@ -121,53 +120,31 @@ namespace Inventory
             // returns True if string contains CR or Tab
             // returns False if string is safe
 
+            if (input == null)
+            {
+                throw new ArgumentNullException("input", "Your input cannot be null");
+            }
             if (input.Contains("\n") || input.Contains("\t"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool ContainsDangerousCharacters(string[] input)
-        {
-            // returns True if string contains CR or Tab
-            // returns False if string is safe
-
-            if (input.Contains("\n") || input.Contains("\t"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            { return true; } else { return false; }
         }
 
         public string RemoveUnnecessarySeperators(string input)
         {
-            // returns a string without seperator characters for empty fields
+            // returns a string without right-hand seperator characters for empty fields
             // input;a;b;;;; -> input;a;b
 
             if (input == null)
             {
                 throw new ArgumentNullException("input", "Your input cannot be null");
             }
-            if (input.Length == 0)
-            {
-                return "";
-            }
             string output = "";
             int i = input.Length;
             while (i > 0)
             {
                 i--;
-                char c = input[i];
-                if (c != seperator)
+                if (input[i] != seperator)
                 {
-                    output = input.Substring(0, i + 1);
+                    output = input.Substring(0, i + 1); //make single operation
                     break;
                 }
             }
@@ -176,33 +153,19 @@ namespace Inventory
 
         public string ParseStringArrayToString(string[] input)
         {
-            // returns a string from a string array
+            // returns a [seperated] string from a string array
             // { "input", "to", "output" } -> "input;to;output"
 
             if (input == null || input.Length == 0 || input.All(item => item == null))
             {
                 throw new ArgumentNullException("input", "Your input array cannot be null");
             }
-            string line = "";
-            for (int i = 0; i < input.Length; i++)
+            string output = "";
+            foreach (string field in input)
             {
-                line += input[i];
-                if (i < input.Length - 1) { line += seperator; }
+                output += field + seperator;
             }
-            return line;
-        }
-
-        public Response<string> AddRecord(string line)
-        {
-            // returns Created if record was succesfully created
-            // returns BadRequest if input contains dangerous characters
-            // returns InternalServerError if for some reason record could not be created
-
-            if (line == null)
-            {
-                throw new ArgumentNullException("line", "Your input cannot be null");
-            }
-            return AddLine(line);
+            return output.Remove(output.Length - 1);
         }
 
         public Response<string> AddRecord(string fieldOne, string fieldTwo, string fieldThree)
@@ -216,49 +179,63 @@ namespace Inventory
                 throw new ArgumentNullException("fieldOne && fieldTwo && fieldThree", "Your fields cannot be null");
             }
             string line = fieldOne + seperator + fieldTwo + seperator + fieldThree;
-            return AddLine(line);
+            return WriteLineToFile(line);
         }
 
-        public Response<string> AddRecord(string[] input)
+        public Response<string> AddRecord(string[] newRecord)
         {
             // returns Created if record was succesfully created
             // returns BadRequest if input array contains danagerous characters
             // returns InternalServerError if for some reason record could not be created
 
-            if (input == null || input.Length == 0 || input.All(item => item == null))
+            if (newRecord == null || newRecord.Length == 0 || newRecord.All(item => item == null))
             {
                 throw new ArgumentNullException("input", "Your input array cannot be null");
             }
-            string line = ParseStringArrayToString(input);
-            return AddLine(line);
+            string line = ParseStringArrayToString(newRecord);
+            return WriteLineToFile(line);
         }
 
-        private Response<string> CopyLine(string line)
-        {
-            // returns Created if record was succesfully created
-            // returns InternalServerError if for some reason record could not be created
-
-            try
-            {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@tempFile, true))
-                {
-                    file.WriteLine(RemoveUnnecessarySeperators(line));
-                    return HttpStatusCode.Created;
-                }
-            }
-            catch (Exception)
-            {
-                return HttpStatusCode.InternalServerError;
-                throw;
-            }
-        }
-
-        private Response<string> EditRecord(string key, int column, string newRecord)
+        public Response<string> EditRecord(string key, int column, string fieldOne, string fieldTwo, string fieldThree)
         {
             // returns OK if record was edited
             // returns NotFound if key was not found
             // returns InternalServerError if for some reason the record could not be edited
 
+            if (fieldOne == null && fieldTwo == null && fieldThree == null)
+            {
+                throw new ArgumentNullException("fieldOne && fieldTwo && fieldThree", "Your fields cannot be null");
+            }
+            string line = fieldOne + seperator + fieldTwo + seperator + fieldThree;
+            return RewriteFile(key, column, RemoveUnnecessarySeperators(line));
+        }
+
+        public Response<string> EditRecord(string key, int column, string[] newRecord)
+        {
+            // returns OK if record was edited
+            // returns NotFound if key was not found
+            // returns InternalServerError if for some reason the record could not be edited
+
+            if (newRecord == null || newRecord.Length == 0 || newRecord.All(item => item == null))
+            {
+                throw new ArgumentNullException("newRecord", "Your newRecord array cannot be null");
+            }
+            string line = ParseStringArrayToString(newRecord);
+            return RewriteFile(key, column, RemoveUnnecessarySeperators(line));
+        }
+
+        public Response<string> DeleteRecord(string key, int column)
+        {
+            // returns OK if record was deleted
+            // returns NotFound if key was not found
+            // returns InternalServerError if for some reason the record could not be edited
+
+            string newRecord = null;
+            return RewriteFile(key, column, newRecord);
+        }
+
+        private Response<string> RewriteFile(string key, int column, string newRecord)
+        {
             if (key == null)
             {
                 throw new ArgumentNullException("key", "Your key cannot be null");
@@ -273,27 +250,23 @@ namespace Inventory
             {
                 File.Delete(@tempFile);
                 string[] lines = System.IO.File.ReadAllLines(filepath);
-                for (int i = 0; i < lines.Length; i++)
+                foreach (var line in lines)
                 {
-                    string[] fields = lines[i].Split(seperator);
-
+                    string[] fields = line.Split(seperator);
                     if (fields.Length < column)
                     {
-                        if (!CopyLine(lines[i]).IsSuccessStatusCode) { error = true; }
+                        if (!WriteLineToFile(line, WriteTo.Temp).IsSuccessStatusCode) { error = true; }
                     }
-                    else
+                    else if (fields[column - 1] != key)
                     {
-                        if (fields[column - 1] != key)
+                        if (!WriteLineToFile(line, WriteTo.Temp).IsSuccessStatusCode) { error = true; }
+                    }
+                    else if (fields[column - 1] == key)
+                    {
+                        found = true;
+                        if (newRecord != null)
                         {
-                            if (!CopyLine(lines[i]).IsSuccessStatusCode) { error = true; }
-                        }
-                        else
-                        {
-                            found = true;
-                            if (newRecord != null)
-                            {
-                                if (!CopyLine(newRecord).IsSuccessStatusCode) { error = true; }
-                            }
+                            if (!WriteLineToFile(newRecord, WriteTo.Temp).IsSuccessStatusCode) { error = true; }
                         }
                     }
                 }
@@ -313,6 +286,7 @@ namespace Inventory
                     File.Delete(@tempFile);
                     return HttpStatusCode.NotFound;
                 }
+
             }
             catch (Exception)
             {
@@ -321,44 +295,7 @@ namespace Inventory
             }
         }
 
-        public Response<string> EditRecord(string key, int column, string fieldOne, string fieldTwo, string fieldThree)
-        {
-            // returns OK if record was edited
-            // returns NotFound if key was not found
-            // returns InternalServerError if for some reason the record could not be edited
-
-            if (fieldOne == null && fieldTwo == null && fieldThree == null)
-            {
-                throw new ArgumentNullException("fieldOne && fieldTwo && fieldThree", "Your fields cannot be null");
-            }
-            string line = fieldOne + seperator + fieldTwo + seperator + fieldThree;
-            return EditRecord(key, column, RemoveUnnecessarySeperators(line));
-        }
-
-        public Response<string> EditRecord(string key, int column, string[] newRecord)
-        {
-            // returns OK if record was edited
-            // returns NotFound if key was not found
-            // returns InternalServerError if for some reason the record could not be edited
-
-            if (newRecord == null || newRecord.Length == 0 || newRecord.All(item => item == null))
-            {
-                throw new ArgumentNullException("newRecord", "Your newRecord array cannot be null");
-            }
-            return EditRecord(key, column, RemoveUnnecessarySeperators(ParseStringArrayToString(newRecord)));
-        }
-
-        public Response<string> DeleteRecord(string key, int column)
-        {
-            // returns OK if record was edited
-            // returns NotFound if key was not found
-            // returns InternalServerError if for some reason the record could not be edited
-
-            string newRecord = null;
-            return EditRecord(key, column, newRecord);
-        }
-
-        public Response<bool> RecordExists(string key, int column)
+        public Response<bool> RecordExists(string key, int column) //WIP
         {
             // returns True if key exists
             // returns False if key could not be found
@@ -372,28 +309,7 @@ namespace Inventory
             {
                 throw new ArgumentOutOfRangeException("column", "CSV column range starts at 1! You cannot use zero or negative");
             }
-            try
-            {
-                string[] lines = System.IO.File.ReadAllLines(filepath);
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    string[] fields = lines[i].Split(seperator);
-
-                    if (fields.Length >= column)
-                    {
-                        if (fields[column - 1] == key)
-                        {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-            catch (Exception)
-            {
-                return HttpStatusCode.InternalServerError;
-                throw;
-            }
+            return ReadRecord(key, column).Result != null ? true : false;
         }
 
         public Response<string> ReadRecord(string key, int column)
@@ -413,16 +329,12 @@ namespace Inventory
             try
             {
                 string[] lines = System.IO.File.ReadAllLines(filepath);
-                for (int i = 0; i < lines.Length; i++)
+                foreach (string line in lines)
                 {
-                    string[] fields = lines[i].Split(seperator);
-
-                    if (fields.Length >= column)
+                    string[] fields = line.Split(seperator);
+                    if ((fields.Length >= column) && (fields[column - 1] == key))
                     {
-                        if (fields[column - 1] == key)
-                        {
-                            return lines[i];
-                        }
+                        return line;
                     }
                 }
                 return HttpStatusCode.NotFound;
@@ -432,6 +344,30 @@ namespace Inventory
                 return HttpStatusCode.InternalServerError;
                 throw;
             }
+        }
+
+        public Response<string> Replace(string key, int column, string value)
+        {
+            // returns OK if key was edited
+            // returns NotFound if key could not be found
+            // returns InternalServerError if for some reason the file could not be read
+
+            if (key == null)
+            {
+                throw new ArgumentNullException("key", "Your key cannot be null");
+            }
+            if (column < 1)
+            {
+                throw new ArgumentOutOfRangeException("column", "CSV column range starts at 1! You cannot use zero or negative");
+            }
+            var readingRecord = ReadRecord(key, column);
+            if (readingRecord.IsSuccessStatusCode)
+            {
+                string[] fields = readingRecord.Result.Split(seperator);
+                fields[column - 1] = value;
+                return EditRecord(key, column, fields);
+            }
+            return readingRecord.Status;
         }
     }
 }
