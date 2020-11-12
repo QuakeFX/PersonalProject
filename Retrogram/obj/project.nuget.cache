@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "xheuyAO13Bquf7svYLZsimjxXluFXN3tJ/xLhH0cB01pCOigccJxB/Fw+veH9C6OafPfz3UOQRFQQQlRHSkhUA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\axlve\\Source\\Repos\\PersonalProject\\Retrogram\\Retrogram.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\axlve\\.nuget\\packages\\geevers.infrastructure\\1.0.3\\geevers.infrastructure.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

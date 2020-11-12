@@ -4,7 +4,9 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory", "Inventory\Inventory.csproj", "{7D02EC0F-7617-4108-9E0C-BD3D185E4C46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestProject1", "XUnitTestProject1\XUnitTestProject1.csproj", "{4D659491-97EB-4803-B8B9-9D19596A688C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestProject1", "XUnitTestProject1\XUnitTestProject1.csproj", "{4D659491-97EB-4803-B8B9-9D19596A688C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retrogram", "Retrogram\Retrogram.csproj", "{4D2707D0-30E9-4F98-8844-57892836E27D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{4D659491-97EB-4803-B8B9-9D19596A688C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D659491-97EB-4803-B8B9-9D19596A688C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D659491-97EB-4803-B8B9-9D19596A688C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D2707D0-30E9-4F98-8844-57892836E27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D2707D0-30E9-4F98-8844-57892836E27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D2707D0-30E9-4F98-8844-57892836E27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D2707D0-30E9-4F98-8844-57892836E27D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

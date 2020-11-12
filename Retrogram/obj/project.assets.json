@@ -1,0 +1,119 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Geevers.Infrastructure/1.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Geevers.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Geevers.Infrastructure.dll": {}
+        }
+      },
+      "Inventory/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Geevers.Infrastructure": "1.0.3"
+        },
+        "compile": {
+          "bin/placeholder/Inventory.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Inventory.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Geevers.Infrastructure/1.0.3": {
+      "sha512": "ZHzftK5IdAFEIthD/sM20RsbTjVn9EJpLI5HgGWc5HP1ES211ptVMaByuScjZHNuetiuUWK/9uIoK+YKHLQiaw==",
+      "type": "package",
+      "path": "geevers.infrastructure/1.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "geevers.infrastructure.1.0.3.nupkg.sha512",
+        "geevers.infrastructure.nuspec",
+        "lib/netstandard2.0/Geevers.Infrastructure.dll"
+      ]
+    },
+    "Inventory/1.0.0": {
+      "type": "project",
+      "path": "../Inventory/Inventory.csproj",
+      "msbuildProject": "../Inventory/Inventory.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v3.1": [
+      "Geevers.Infrastructure >= 1.0.3",
+      "Inventory >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\axlve\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\axlve\\Source\\Repos\\PersonalProject\\Retrogram\\Retrogram.csproj",
+      "projectName": "Retrogram",
+      "projectPath": "C:\\Users\\axlve\\Source\\Repos\\PersonalProject\\Retrogram\\Retrogram.csproj",
+      "packagesPath": "C:\\Users\\axlve\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\axlve\\Source\\Repos\\PersonalProject\\Retrogram\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\axlve\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp3.1"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "projectReferences": {
+            "C:\\Users\\axlve\\Source\\Repos\\PersonalProject\\Inventory\\Inventory.csproj": {
+              "projectPath": "C:\\Users\\axlve\\Source\\Repos\\PersonalProject\\Inventory\\Inventory.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "netcoreapp3.1": {
+        "dependencies": {
+          "Geevers.Infrastructure": {
+            "target": "Package",
+            "version": "[1.0.3, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

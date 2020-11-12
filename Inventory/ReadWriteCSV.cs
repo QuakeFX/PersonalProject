@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using Geevers.Infrastructure;
 
 namespace Inventory
@@ -368,6 +370,38 @@ namespace Inventory
                 return EditRecord(key, column, fields);
             }
             return readingRecord.Status;
+        }
+
+        public Response<List<string[]>> ReadFile()
+        {
+            string[] lines = System.IO.File.ReadAllLines(filepath);
+            var list = new List<string[]>();
+            foreach (string line in lines)
+            {
+                list.Add(line.Split(seperator));
+            }
+            return list;
+        }
+
+        public void SaveDrawing(List<string> rows)
+        {
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(filepath, true))
+            {
+                foreach (string row in rows)
+                {
+                    file.WriteLine(row);
+                }
+            }
+        }
+        public List<string> LoadDrawing()
+        {
+            var list = new List<string>();
+            string[] lines = System.IO.File.ReadAllLines(filepath);
+            foreach (string row in lines)
+            {
+                list.Add(row);
+            }
+            return list;
         }
     }
 }
