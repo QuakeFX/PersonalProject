@@ -6,7 +6,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory", "Inventory\Inve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestProject1", "XUnitTestProject1\XUnitTestProject1.csproj", "{4D659491-97EB-4803-B8B9-9D19596A688C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retrogram", "Retrogram\Retrogram.csproj", "{4D2707D0-30E9-4F98-8844-57892836E27D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retrogram", "Retrogram\Retrogram.csproj", "{4D2707D0-30E9-4F98-8844-57892836E27D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestsRetrogram", "XUnitTestsRetrogram\XUnitTestsRetrogram.csproj", "{51508946-D5EE-4F3A-8496-A3833F71F0A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{4D2707D0-30E9-4F98-8844-57892836E27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D2707D0-30E9-4F98-8844-57892836E27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D2707D0-30E9-4F98-8844-57892836E27D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51508946-D5EE-4F3A-8496-A3833F71F0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51508946-D5EE-4F3A-8496-A3833F71F0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51508946-D5EE-4F3A-8496-A3833F71F0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51508946-D5EE-4F3A-8496-A3833F71F0A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

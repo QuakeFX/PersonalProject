@@ -17,8 +17,8 @@ namespace Retrogram
             string input1 = "goto axl.verheul";
             string input2 = "goto 1006884";
             string input3 = "goto #hashtag";
-            string input4 = "back";
-            string input5 = "comment that's so cool!";
+            string input4 = "login";
+            string input5 = "comment that's so cool! #";
             string input6 = "comment this is fire #fire #faka";
             var output1 = ConvertInput(input1);
             var output2 = ConvertInput(input2);
@@ -27,13 +27,31 @@ namespace Retrogram
             var output5 = ConvertInput(input5);
             var output6 = ConvertInput(input6);
 
-            Dictionary<Enum, string> test = new Dictionary<Enum, string>();
-            test.Add(Input.Command, "goto");
-            test.Add(Input.Dir, "axl.verheul");
-            test.Add(Input.Comment, "that is fire!");
-            test.Add(Input.Tags, "fire, water");
+            //Dictionary<Enum, string> test = new Dictionary<Enum, string>();
+            //test.Add(Input.Command, "goto");
+            //test.Add(Input.Dir, "axl.verheul");
+            //test.Add(Input.Comment, "that is fire!");
+            //test.Add(Input.Tags, "fire, water");
 
-            string action = test[Input.Command];
+
+            string[] input = input6.Trim().Split(' ');
+            var dict = new Dictionary<Enum, string>();
+
+            var query = input.Skip(1).Where(w => w.Substring(0, 1).Contains('#')).Select(w => w.Substring(1,w.Length-1));
+            string abr = string.Join(",", query);
+            Console.WriteLine(abr);
+            var query2 = input.Skip(1).Where(w => !w.Substring(0, 1).Contains('#')).Select(w => w);
+            string abd = string.Join(' ', query2);
+            Console.WriteLine(abd);
+
+            string[] tags = abr.Split(',');
+            foreach (var item in abr)
+            {
+                Console.WriteLine("*" + item + "*");
+            }
+
+
+            string action = output1[Input.Command];
 
             switch (action)
             {
@@ -43,6 +61,7 @@ namespace Retrogram
                         // user: "axl.verheul" (opt: @)
                         // item: "1005884" (TryParseInt32)
                         // tag: "fire" (indicate with #)
+                        Console.WriteLine("directory: " + output1[Input.Dir]);
                         break;
                     }
 
@@ -52,6 +71,8 @@ namespace Retrogram
                         // "that is fire!" (insert into db)
                         // Input.Tags
                         // "fire, water" (insert into db)
+                        Console.WriteLine("comment: " + output1[Input.Comment]);
+                        Console.WriteLine("tags: " + output1[Input.Tags]);
                         break;
                     }
 
@@ -64,6 +85,7 @@ namespace Retrogram
                 case "login":
                     {
                         //
+                        Console.WriteLine("login");
                         break;
                     }
 
@@ -104,44 +126,59 @@ namespace Retrogram
             */
         }
 
-        static List<string> ConvertInput(string input) //WIP
+        static Dictionary<Enum,string> ConvertInput(string input) //WIP
         {
+            var dict = new Dictionary<Enum, string>();
+
             input = input.Trim();
             string[] words = input.Split(' ');
-            string command = words[0];
-            //if Length == 1, return
-            //if (words.Length ==1) {return command; }
 
-            string dir;
+            string command = words[0];
+            dict.Add(Input.Command, command);
+            if (words.Length == 1) 
+            {
+                return dict;
+            }
+
             if (words.Length == 2)
             {
-                dir = words[1];
+                dict.Add(Input.Dir, words[1]);
+                return dict;
             }
-            //if Length == 2, return
-            //return dir;
 
-            //words.Length = 3
-            //comment cool! #like
+            List<string> tagsList = new List<string>();
+            //notes: use list for (comment) comparison, keep string clean for db
 
-            List<string> tags = new List<string>(); //turn this into string
+            string tags = "";
             foreach (string str in words)
             {
                 if (str.Substring(0, 1) == "#")
                 {
-                    tags.Add(str);
+                    tagsList.Add(str);
+                    if (str.Length > 1)
+                    {
+                        tags += str.Substring(1, str.Length - 1) + ", ";
+                    }
                 }
             }
-            // now we have tags;
+            if (tags != "")
+            {
+                tags = tags.Substring(0, tags.Length - 2);
+            }
+            dict.Add(Input.Tags, tags);
+            // now we have a list with (optional) tags
 
             string comment = "";
             for (int i = 1; i < words.Length; i++)
             {
-                if (!tags.Contains(words[i]))
+                if (!tagsList.Contains(words[i]))
                 {
                     comment += words[i] + " ";
                 }
             }
             comment = comment.Trim();
+            dict.Add(Input.Comment, comment);
+            return dict;
             // now we have a comment
 
             // -----------------------------------
